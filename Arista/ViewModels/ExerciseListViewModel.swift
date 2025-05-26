@@ -9,6 +9,12 @@ import Foundation
 
 import CoreData
 
+struct Exercise: Identifiable {
+    var id: UUID
+   // TODO: Define other properties of Exercise DTO != model UI
+    // Final, main actor
+}
+
 class ExerciseListViewModel: ObservableObject {
     @Published var exercises = [Exercise]()
     @Published var errorMessage: String?

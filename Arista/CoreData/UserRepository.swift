@@ -21,4 +21,3 @@ struct UserRepository {
         return try viewContext.fetch(request).first
     }
 }
-

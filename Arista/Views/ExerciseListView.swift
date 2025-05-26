@@ -15,7 +15,7 @@ struct ExerciseListView: View {
         NavigationView {
             List(viewModel.exercises) { exercise in
                 HStack {
-                    Image(systemName: iconForCategory(exercise.category))
+                    Image(systemName: iconForCategory(exercise.type ?? ""))
                     VStack(alignment: .leading) {
                         Text(exercise.category)
                             .font(.headline)
@@ -37,7 +37,7 @@ struct ExerciseListView: View {
             })
         }
         .sheet(isPresented: $showingAddExerciseView) {
-            AddExerciseView(viewModel: AddExerciseViewModel(context: viewModel.viewContext))
+            AddExerciseView(viewModel: AddExerciseViewModel(repository: ExerciseRepository()))
         }
         
     }
@@ -84,5 +84,5 @@ struct IntensityIndicator: View {
 }
 
 #Preview {
-    ExerciseListView(viewModel: ExerciseListViewModel(context: PersistenceController.preview.container.viewContext))
+    ExerciseListView(viewModel: ExerciseListViewModel(repository: ExerciseRepository()))
 }
