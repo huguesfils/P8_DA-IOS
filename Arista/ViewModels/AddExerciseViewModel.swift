@@ -13,15 +13,25 @@ class AddExerciseViewModel: ObservableObject {
     @Published var startTime: String = ""
     @Published var duration: String = ""
     @Published var intensity: String = ""
+    @Published var errorMessage: String? = nil
 
-    private var viewContext: NSManagedObjectContext
+    private let repository: ExerciseRepository
 
-    init(context: NSManagedObjectContext) {
-        self.viewContext = context
+    init(repository: ExerciseRepository) {
+        self.repository = repository
     }
 
     func addExercise() -> Bool {
-        // TODO: Ajouter ici la logique pour créer et sauvegarder un nouvel exercice dans CoreData
-        return true
+        guard let durationInt = Int32(duration), !category.isEmpty, !intensity.isEmpty else {
+            errorMessage = "Veuillez remplir tous les champs correctement."
+            return false
+        }
+        do {
+            try repository.addExercise(type: category, duration: durationInt, intensity: intensity, date: Date())
+            return true
+        } catch {
+            errorMessage = "Erreur lors de l'ajout de l'exercice : \(error.localizedDescription)"
+            return false
+        }
     }
 }

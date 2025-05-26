@@ -9,33 +9,21 @@ import Foundation
 import CoreData
 
 class SleepHistoryViewModel: ObservableObject {
-    @Published var sleepSessions = [FakeSleepSession]()
+    @Published var sleepSessions = [Sleep]()
+    @Published var errorMessage: String?
     
-    private var viewContext: NSManagedObjectContext
+    private let repository: SleepRepository
     
-    init(context: NSManagedObjectContext) {
-        self.viewContext = context
+    init(repository: SleepRepository) {
+        self.repository = repository
         fetchSleepSessions()
     }
     
-    private func fetchSleepSessions() {
-        
-        sleepSessions = [FakeSleepSession(), 
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession()]
+    func fetchSleepSessions() {
+        do {
+            sleepSessions = try repository.getSleepSessions()
+        } catch {
+            errorMessage = "Erreur lors du chargement des données : \(error.localizedDescription)"
+        }
     }
-}
-
-struct FakeSleepSession: Identifiable {
-    var id = UUID()
-    var startDate: Date = Date()
-    var duration: Int = 695
-    var quality: Int = (0...10).randomElement()!
 }
