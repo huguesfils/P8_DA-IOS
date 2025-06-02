@@ -1,37 +1,40 @@
-//
-//  ExerciseListViewModel.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import Foundation
-
 import CoreData
 
-struct Exercise: Identifiable {
-    var id: UUID
-   // TODO: Define other properties of Exercise DTO != model UI
-    // Final, main actor
+struct ExerciseViewData: Identifiable {
+    let id: UUID
+    let type: String
+    let duration: Int32
+    let intensity: String
+    let date: Date
 }
 
-class ExerciseListViewModel: ObservableObject {
-    @Published var exercises = [Exercise]()
+@MainActor
+final class ExerciseListViewModel: ObservableObject {
+    @Published var exercises = [ExerciseViewData]()
     @Published var errorMessage: String?
     
-    private let repository: ExerciseRepository
+    let repository: ExerciseRepository
     
     init(repository: ExerciseRepository) {
         self.repository = repository
         fetchExercises()
     }
 
-    private func fetchExercises() {
+    func fetchExercises() {
         do {
-            exercises = try repository.getExercises()
+            let coreDataExercises = try repository.getExercises()
+            exercises = coreDataExercises.map { exercise in
+                ExerciseViewData(
+                    id: exercise.id ?? UUID(),
+                    type: exercise.type ?? "Inconnu",
+                    duration: exercise.duration,
+                    intensity: String(exercise.intensity),
+                    date: exercise.date ?? Date()
+                )
+            }
         } catch {
             errorMessage = "Erreur lors du chargement des données : \(error.localizedDescription)"
         }
     }
 }
-

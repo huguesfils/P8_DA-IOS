@@ -1,14 +1,8 @@
-//
-//  AddExerciseViewModel.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import Foundation
 import CoreData
 
-class AddExerciseViewModel: ObservableObject {
+@MainActor
+final class AddExerciseViewModel: ObservableObject {
     @Published var category: String = ""
     @Published var startTime: String = ""
     @Published var duration: String = ""
@@ -22,12 +16,14 @@ class AddExerciseViewModel: ObservableObject {
     }
 
     func addExercise() -> Bool {
-        guard let durationInt = Int32(duration), !category.isEmpty, !intensity.isEmpty else {
+        guard let durationInt = Int32(duration),
+              let intensityInt = Int32(intensity),
+              !category.isEmpty, !intensity.isEmpty else {
             errorMessage = "Veuillez remplir tous les champs correctement."
             return false
         }
         do {
-            try repository.addExercise(type: category, duration: durationInt, intensity: intensity, date: Date())
+            try repository.addExercise(type: category, duration: durationInt, intensity: intensityInt, date: Date())
             return true
         } catch {
             errorMessage = "Erreur lors de l'ajout de l'exercice : \(error.localizedDescription)"

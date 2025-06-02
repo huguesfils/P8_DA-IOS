@@ -1,15 +1,9 @@
-//
-//  AddExerciseView.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import SwiftUI
 
 struct AddExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: AddExerciseViewModel
+    var onAdd: (() -> Void)? = nil
 
     var body: some View {
         NavigationView {
@@ -23,6 +17,7 @@ struct AddExerciseView: View {
                 Spacer()
                 Button("Ajouter l'exercice") {
                     if viewModel.addExercise() {
+                        onAdd?()
                         presentationMode.wrappedValue.dismiss()
                     }
                 }.buttonStyle(.borderedProminent)

@@ -1,10 +1,3 @@
-//
-//  ExerciseRepository.swift
-//  Arista
-//
-//  Created by Hugues Fils Caparos on 26/05/2025.
-//
-
 import Foundation
 import CoreData
 
@@ -21,7 +14,7 @@ struct ExerciseRepository {
         return try viewContext.fetch(request)
     }
     
-    func addExercise(type: String, duration: Int32, intensity: String, date: Date) throws {
+    func addExercise(type: String, duration: Int32, intensity: Int32, date: Date) throws {
         let exercise = Exercise(context: viewContext)
         exercise.type = type
         exercise.duration = duration
