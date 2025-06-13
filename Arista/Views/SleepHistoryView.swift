@@ -1,14 +1,7 @@
-//
-//  SleepHistoryView.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import SwiftUI
 
 struct SleepHistoryView: View {
-    @ObservedObject var viewModel: SleepHistoryViewModel
+    @State var viewModel: SleepHistoryViewModel
 
         var body: some View {
             List(viewModel.sleepSessions) { session in

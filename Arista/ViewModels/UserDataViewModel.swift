@@ -2,10 +2,11 @@ import Foundation
 import CoreData
 
 @MainActor
-final class UserDataViewModel: ObservableObject {
-    @Published var firstName: String = ""
-    @Published var lastName: String = ""
-    @Published var errorMessage: String? = nil
+@Observable
+final class UserDataViewModel {
+    var firstName: String = ""
+    var lastName: String = ""
+    var errorMessage: String? = nil
     
     private let userRepository: UserRepository
     

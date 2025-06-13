@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ExerciseListView: View {
-    @ObservedObject var viewModel: ExerciseListViewModel
+    @State var viewModel: ExerciseListViewModel
     @State private var showingAddExerciseView = false
     
     var body: some View {

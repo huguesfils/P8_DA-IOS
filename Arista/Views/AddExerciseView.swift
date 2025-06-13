@@ -2,7 +2,8 @@ import SwiftUI
 
 struct AddExerciseView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: AddExerciseViewModel
+    @State var viewModel: AddExerciseViewModel
+    
     var onAdd: (() -> Void)? = nil
 
     var body: some View {

@@ -1,17 +1,28 @@
 import Foundation
 import CoreData
 
-struct SleepViewData: Identifiable {
+struct Sleep: Identifiable {
     let id: UUID
     let startTime: Date
     let duration: Int32
     let quality: Int
+    
+    init?(entity: SleepEntity) {
+        guard let id = entity.id, let startTime = entity.startTime else {
+            return nil
+        }
+        self.id = id
+        self.startTime = startTime
+        self.duration = entity.duration
+        self.quality = Int(entity.quality)
+    }
 }
 
 @MainActor
-final class SleepHistoryViewModel: ObservableObject {
-    @Published var sleepSessions = [SleepViewData]()
-    @Published var errorMessage: String?
+@Observable
+final class SleepHistoryViewModel {
+    var sleepSessions = [Sleep]()
+    var errorMessage: String?
     
     private let repository: SleepRepository
     
@@ -23,15 +34,7 @@ final class SleepHistoryViewModel: ObservableObject {
     private func fetchSleepSessions() {
         do {
             let coreDataSessions = try repository.getSleepSessions()
-            sleepSessions = coreDataSessions.compactMap { session in
-                guard let id = session.id, let startTime = session.startTime else { return nil }
-                return SleepViewData(
-                    id: id,
-                    startTime: startTime,
-                    duration: session.duration,
-                    quality: Int(session.quality)
-                )
-            }
+            sleepSessions = coreDataSessions.compactMap { Sleep(entity: $0) }
         } catch {
             errorMessage = "Erreur lors du chargement des données : \(error.localizedDescription)"
         }

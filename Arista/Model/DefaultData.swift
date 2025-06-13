@@ -11,16 +11,16 @@ struct DefaultData {
         let userRepository = UserRepository(viewContext: viewContext)
         let sleepRepository = SleepRepository(viewContext: viewContext)
         if (try? userRepository.getUser()) == nil {
-            let initialUser = User(context: viewContext)
+            let initialUser = UserEntity(context: viewContext)
             initialUser.firstName = "Charlotte"
             initialUser.lastName = "Razoul"
             
             if try sleepRepository.getSleepSessions().isEmpty {
-                let sleep1 = Sleep(context: viewContext)
-                let sleep2 = Sleep(context: viewContext)
-                let sleep3 = Sleep(context: viewContext)
-                let sleep4 = Sleep(context: viewContext)
-                let sleep5 = Sleep(context: viewContext)
+                let sleep1 = SleepEntity(context: viewContext)
+                let sleep2 = SleepEntity(context: viewContext)
+                let sleep3 = SleepEntity(context: viewContext)
+                let sleep4 = SleepEntity(context: viewContext)
+                let sleep5 = SleepEntity(context: viewContext)
                 
                 let timeIntervalForADay: TimeInterval = 60 * 60 * 24
                 

@@ -2,19 +2,20 @@ import Foundation
 import CoreData
 
 @MainActor
-final class AddExerciseViewModel: ObservableObject {
-    @Published var category: String = ""
-    @Published var startTime: String = ""
-    @Published var duration: String = ""
-    @Published var intensity: String = ""
-    @Published var errorMessage: String? = nil
-
+@Observable
+final class AddExerciseViewModel {
+    var category: String = ""
+    var startTime: String = ""
+    var duration: String = ""
+    var intensity: String = ""
+    var errorMessage: String? = nil
+    
     private let repository: ExerciseRepository
-
+    
     init(repository: ExerciseRepository) {
         self.repository = repository
     }
-
+    
     func addExercise() -> Bool {
         guard let durationInt = Int32(duration),
               let intensityInt = Int32(intensity),

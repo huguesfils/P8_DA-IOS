@@ -15,9 +15,9 @@ struct SleepRepository {
         self.viewContext = viewContext
     }
     
-    func getSleepSessions() throws -> [Sleep] {
-        let request = Sleep.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(SortDescriptor<Sleep>(\.startTime, order: .reverse))]
+    func getSleepSessions() throws -> [SleepEntity] {
+        let request = SleepEntity.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(SortDescriptor<SleepEntity>(\.startTime, order: .reverse))]
         return try viewContext.fetch(request)
     }
 }
