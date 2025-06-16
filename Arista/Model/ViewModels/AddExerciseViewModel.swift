@@ -12,7 +12,7 @@ final class AddExerciseViewModel {
     
     private let repository: ExerciseRepository
     
-    init(repository: ExerciseRepository) {
+    init(repository: ExerciseRepository = ExerciseRepository()) {
         self.repository = repository
     }
     

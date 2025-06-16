@@ -28,9 +28,9 @@ final class ExerciseListViewModel {
     var exercises = [Exercise]()
     var errorMessage: String?
     
-    let repository: ExerciseRepository
+    private let repository: ExerciseRepository
     
-    init(repository: ExerciseRepository) {
+    init(repository: ExerciseRepository = ExerciseRepository()) {
         self.repository = repository
         fetchExercises()
     }

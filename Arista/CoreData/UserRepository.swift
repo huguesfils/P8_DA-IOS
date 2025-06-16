@@ -8,7 +8,11 @@
 import Foundation
 import CoreData
 
-struct UserRepository {
+protocol UserRepositoryInterface {
+    func getUser() throws -> UserEntity?
+}
+
+struct UserRepository: UserRepositoryInterface {
     let viewContext: NSManagedObjectContext
     
     init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {

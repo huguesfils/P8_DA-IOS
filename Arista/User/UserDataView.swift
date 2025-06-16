@@ -29,5 +29,5 @@ struct UserDataView: View {
 }
 
 #Preview {
-    UserDataView(viewModel: UserDataViewModel(userRepository: UserRepository()))
+    UserDataView(viewModel: UserDataViewModel())
 }

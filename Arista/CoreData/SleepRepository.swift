@@ -8,7 +8,11 @@
 import Foundation
 import CoreData
 
-struct SleepRepository {
+protocol SleepRepositoryInterface {
+    func getSleepSessions() throws -> [SleepEntity]
+}
+
+struct SleepRepository: SleepRepositoryInterface {
     let viewContext: NSManagedObjectContext
     
     init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {

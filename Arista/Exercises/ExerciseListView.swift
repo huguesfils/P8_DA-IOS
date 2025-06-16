@@ -19,7 +19,7 @@ struct ExerciseListView: View {
                         
                     }
                     Spacer()
-                    IntensityIndicator(intensity: Int(exercise.intensity) ?? 0)
+                    IntensityIndicator(intensity: Int(exercise.intensity))
                 }
             }
             .navigationTitle("Exercices")
@@ -29,13 +29,14 @@ struct ExerciseListView: View {
                 Image(systemName: "plus")
             })
         }
-        .sheet(isPresented: $showingAddExerciseView) {
+        .sheet(isPresented: $showingAddExerciseView, onDismiss: { viewModel.fetchExercises()}) {
             AddExerciseView(
-                viewModel: AddExerciseViewModel(repository: viewModel.repository),
-                onAdd: {
-                    viewModel.fetchExercises()
-                }
+                viewModel: AddExerciseViewModel()
             )
+        }
+            
+        .onAppear {
+            viewModel.fetchExercises()
         }
     }
     
@@ -81,5 +82,5 @@ struct IntensityIndicator: View {
 }
 
 #Preview {
-    ExerciseListView(viewModel: ExerciseListViewModel(repository: ExerciseRepository()))
+    ExerciseListView(viewModel: ExerciseListViewModel())
 }

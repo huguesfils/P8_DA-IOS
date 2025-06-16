@@ -47,5 +47,5 @@ struct QualityIndicator: View {
 }
 
 #Preview {
-    SleepHistoryView(viewModel: SleepHistoryViewModel(repository: SleepRepository()))
+    SleepHistoryView(viewModel: SleepHistoryViewModel())
 }
