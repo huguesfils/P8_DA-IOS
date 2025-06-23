@@ -6,7 +6,7 @@ struct AddExerciseView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            ZStack(alignment: .bottom) {
                 Form {
                     Picker("Catégorie", selection: $viewModel.category) {
                         ForEach(viewModel.categories, id: \ .self) { cat in
@@ -30,8 +30,13 @@ struct AddExerciseView: View {
                             viewModel.intensity = String(Int(viewModel.intensityDouble))
                         }
                     }
-                }.formStyle(.grouped)
-                Spacer()
+                    if let error = viewModel.errorMessage {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 8)
+                    }
+                }
                 Button("Ajouter l'exercice") {
                     if viewModel.addExercise() {
                         presentationMode.wrappedValue.dismiss()
@@ -39,14 +44,9 @@ struct AddExerciseView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!viewModel.isFormValid)
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 8)
-                }
+                .padding(.bottom, 16)
             }
-            .navigationTitle("Nouvel Exercice ...")
+            .navigationTitle("Nouvel exercice")
         }
     }
 }

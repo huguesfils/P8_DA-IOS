@@ -1,10 +1,3 @@
-//
-//  AristaApp.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import SwiftUI
 
 @main

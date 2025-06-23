@@ -2,25 +2,18 @@ import Foundation
 import Testing
 @testable import Arista
 
-final class MockUserRepository: UserRepositoryInterface {
-    var userToReturn: UserEntity? = nil
-    var shouldThrow = false
-    func getUser() throws -> UserEntity? {
-        if shouldThrow { throw NSError(domain: "Test", code: 1, userInfo: nil) }
-        return userToReturn
-    }
-}
-
 @MainActor
 struct UserDataViewModelTest {
     @Test
     func testFetchUserDataSuccess() async throws {
-        let mockRepo = MockUserRepository()
-        let user = UserEntity(context: PersistenceController.shared.container.viewContext)
+        let container = CoreDataMock.makeInMemoryContainer()
+        let context = container.viewContext
+        let user = UserEntity(context: context)
         user.firstName = "Jean"
         user.lastName = "Dupont"
-        mockRepo.userToReturn = user
-        let viewModel = UserDataViewModel(userRepository: mockRepo)
+        try context.save()
+        let repo = UserRepository(viewContext: context)
+        let viewModel = UserDataViewModel(userRepository: repo)
         #expect(viewModel.firstName == "Jean")
         #expect(viewModel.lastName == "Dupont")
         #expect(viewModel.errorMessage == nil)
@@ -28,9 +21,10 @@ struct UserDataViewModelTest {
 
     @Test
     func testFetchUserDataNoUser() async throws {
-        let mockRepo = MockUserRepository()
-        mockRepo.userToReturn = nil
-        let viewModel = UserDataViewModel(userRepository: mockRepo)
+        let container = CoreDataMock.makeInMemoryContainer()
+        let context = container.viewContext
+        let repo = UserRepository(viewContext: context)
+        let viewModel = UserDataViewModel(userRepository: repo)
         #expect(viewModel.firstName == "")
         #expect(viewModel.lastName == "")
         #expect(viewModel.errorMessage == "Aucun utilisateur trouvé.")
@@ -38,9 +32,34 @@ struct UserDataViewModelTest {
 
     @Test
     func testFetchUserDataError() async throws {
-        let mockRepo = MockUserRepository()
-        mockRepo.shouldThrow = true
-        let viewModel = UserDataViewModel(userRepository: mockRepo)
+        let container = CoreDataMock.makeInMemoryContainer()
+        let context = container.viewContext
+        let repo = UserRepository(viewContext: context)
+        let viewModel = UserDataViewModel(userRepository: repo)
+        #expect(viewModel.errorMessage == "Aucun utilisateur trouvé.")
+    }
+
+    @Test
+    func testFetchUserDataEmptyNames() async throws {
+        let container = CoreDataMock.makeInMemoryContainer()
+        let context = container.viewContext
+        let user = UserEntity(context: context)
+        user.firstName = ""
+        user.lastName = ""
+        try context.save()
+        let repo = UserRepository(viewContext: context)
+        let viewModel = UserDataViewModel(userRepository: repo)
+        #expect(viewModel.firstName == "")
+        #expect(viewModel.lastName == "")
+        #expect(viewModel.errorMessage == nil)
+    }
+
+    @Test
+    func testFetchUserDataRepositoryError() async throws {
+        final class FailingUserRepository: UserRepositoryInterface {
+            func getUser() throws -> UserEntity? { throw NSError(domain: "Test", code: 1, userInfo: nil) }
+        }
+        let viewModel = UserDataViewModel(userRepository: FailingUserRepository())
         #expect(viewModel.errorMessage?.contains("Erreur lors de la récupération de l'utilisateur") == true)
     }
 }

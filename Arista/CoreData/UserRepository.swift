@@ -1,10 +1,3 @@
-//
-//  UserRepository.swift
-//  Arista
-//
-//  Created by Hugues Fils Caparos on 26/05/2025.
-//
-
 import Foundation
 import CoreData
 

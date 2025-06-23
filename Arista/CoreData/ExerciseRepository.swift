@@ -27,6 +27,5 @@ struct ExerciseRepository: ExerciseRepositoryInterface {
         exercise.intensity = intensity
         exercise.date = date
         try viewContext.save()
-        print(try fetchExercises())
     }
 }
