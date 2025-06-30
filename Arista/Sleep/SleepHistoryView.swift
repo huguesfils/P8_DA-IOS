@@ -1,14 +1,7 @@
-//
-//  SleepHistoryView.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import SwiftUI
 
 struct SleepHistoryView: View {
-    @ObservedObject var viewModel: SleepHistoryViewModel
+    @State var viewModel: SleepHistoryViewModel
 
         var body: some View {
             List(viewModel.sleepSessions) { session in
@@ -16,7 +9,7 @@ struct SleepHistoryView: View {
                     QualityIndicator(quality: session.quality)
                         .padding()
                     VStack(alignment: .leading) {
-                        Text("Début : \(session.startDate.formatted())")
+                        Text("Début : \(session.startTime.formatted())")
                         Text("Durée : \(session.duration/60) heures")
                     }
                 }
@@ -54,5 +47,5 @@ struct QualityIndicator: View {
 }
 
 #Preview {
-    SleepHistoryView(viewModel: SleepHistoryViewModel(context: PersistenceController.preview.container.viewContext))
+    SleepHistoryView(viewModel: SleepHistoryViewModel())
 }

@@ -1,17 +1,12 @@
-//
-//  UserDataViewModel.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import Foundation
 import CoreData
 
-class UserDataViewModel: ObservableObject {
-    @Published var firstName: String = ""
-    @Published var lastName: String = ""
-    @Published var errorMessage: String? = nil
+@MainActor
+@Observable
+final class UserDataViewModel {
+    var firstName: String = ""
+    var lastName: String = ""
+    var errorMessage: String? = nil
     
     private let userRepository: UserRepository
     
@@ -20,7 +15,7 @@ class UserDataViewModel: ObservableObject {
         fetchUserData()
     }
     
-    func fetchUserData() {
+    private func fetchUserData() {
         do {
             guard let user = try userRepository.getUser() else {
                 errorMessage = "Aucun utilisateur trouvé."

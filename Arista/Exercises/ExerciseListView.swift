@@ -1,23 +1,16 @@
-//
-//  ExerciseListView.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import SwiftUI
 
 struct ExerciseListView: View {
-    @ObservedObject var viewModel: ExerciseListViewModel
+    @State var viewModel: ExerciseListViewModel
     @State private var showingAddExerciseView = false
     
     var body: some View {
         NavigationView {
             List(viewModel.exercises) { exercise in
                 HStack {
-                    Image(systemName: iconForCategory(exercise.type ?? ""))
+                    Image(systemName: iconForCategory(exercise.type))
                     VStack(alignment: .leading) {
-                        Text(exercise.category)
+                        Text(exercise.type)
                             .font(.headline)
                         Text("Durée: \(exercise.duration) min")
                             .font(.subheadline)
@@ -26,7 +19,7 @@ struct ExerciseListView: View {
                         
                     }
                     Spacer()
-                    IntensityIndicator(intensity: exercise.intensity)
+                    IntensityIndicator(intensity: Int(exercise.intensity))
                 }
             }
             .navigationTitle("Exercices")
@@ -36,10 +29,15 @@ struct ExerciseListView: View {
                 Image(systemName: "plus")
             })
         }
-        .sheet(isPresented: $showingAddExerciseView) {
-            AddExerciseView(viewModel: AddExerciseViewModel(repository: ExerciseRepository()))
+        .sheet(isPresented: $showingAddExerciseView, onDismiss: { viewModel.fetchExercises()}) {
+            AddExerciseView(
+                viewModel: AddExerciseViewModel()
+            )
         }
-        
+            
+        .onAppear {
+            viewModel.fetchExercises()
+        }
     }
     
     func iconForCategory(_ category: String) -> String {
@@ -84,5 +82,5 @@ struct IntensityIndicator: View {
 }
 
 #Preview {
-    ExerciseListView(viewModel: ExerciseListViewModel(repository: ExerciseRepository()))
+    ExerciseListView(viewModel: ExerciseListViewModel())
 }

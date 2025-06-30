@@ -1,14 +1,7 @@
-//
-//  UserDataView.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import SwiftUI
 
 struct UserDataView: View {
-    @ObservedObject var viewModel: UserDataViewModel
+    @State var viewModel: UserDataViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -29,5 +22,5 @@ struct UserDataView: View {
 }
 
 #Preview {
-    UserDataView(viewModel: UserDataViewModel(userRepository: UserRepository()))
+    UserDataView(viewModel: UserDataViewModel())
 }
